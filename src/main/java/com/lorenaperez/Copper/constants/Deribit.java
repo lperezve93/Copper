@@ -9,6 +9,8 @@ public interface Deribit {
 
     String GET_DEPOSIT_URL = "/private/get_deposits";
 
+    String GET_WITHDRAWAL_URL = "/private/get_withdrawals";
+
     // ##### URL Params #####
     String CLIENT_ID = "client_id";
 
