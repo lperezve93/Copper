@@ -1,6 +1,9 @@
 package com.lorenaperez.Copper.service;
 
 import com.lorenaperez.Copper.constants.Deribit;
+import com.lorenaperez.Copper.dto.UserHistoryResponseDTO;
+import com.lorenaperez.Copper.model.UserDeposit;
+import com.lorenaperez.Copper.model.UserWithdrawal;
 import com.lorenaperez.Copper.util.CopperUtil;
 import com.lorenaperez.Copper.dto.UserBalanceResponseDTO;
 import com.lorenaperez.Copper.model.Token;
@@ -16,6 +19,9 @@ import org.springframework.stereotype.Service;
 import com.lorenaperez.Copper.repository.CopperRepository;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -49,8 +55,9 @@ public class CopperService {
         );
     }
 
-    public static List<UserBalanceResponseDTO> getAndSaveUserBalances(List<JSONObject> userDepositList) {
+    public static List<UserBalanceResponseDTO> getAndSaveUserBalances() throws Exception {
         List<UserBalance> userBalanceList = new ArrayList<>();
+        List<JSONObject> userDepositList = getUserDeposits();
         for (JSONObject deposit : userDepositList) {
             UserBalance userBalance = calculateUserBalance(deposit);
             if (userBalance != null) userBalanceList.add(userBalance);
@@ -84,6 +91,72 @@ public class CopperService {
         token.setExpiresIn((Integer) authToken.get("expires_in"));
         token.setScope((String) authToken.get("scope"));
         return token;
+    }
+
+    public static List<UserHistoryResponseDTO> getUserHistory() throws Exception {
+        List<UserHistoryResponseDTO> userHistoryResponseDTOList;
+
+        userHistoryResponseDTOList = getDepositHistory();
+        userHistoryResponseDTOList.addAll(getWithdrawalHistory());
+
+        userHistoryResponseDTOList.sort(Comparator.comparing(UserHistoryResponseDTO::getDate));
+
+        return userHistoryResponseDTOList;
+    }
+
+    private static List<UserHistoryResponseDTO> getDepositHistory() throws Exception {
+        List<JSONObject> userDepositList = getUserDeposits();
+        List<UserDeposit> userDepositHistory = CopperUtil.fromJSONToDepositModel(userDepositList);
+        return userDepositHistory.stream().map(UserHistoryResponseDTO::fromDeposit).collect(Collectors.toList());
+
+    }
+
+    private static List<UserHistoryResponseDTO> getWithdrawalHistory() throws Exception {
+        List<JSONObject> userWithdrawalList = getUserWithdrawals();
+        List<UserWithdrawal> userWithdrawalHistory = CopperUtil.fromJSONToWithdrawalModel(userWithdrawalList);
+        return userWithdrawalHistory.stream().map(UserHistoryResponseDTO::fromWithdrawal).collect(Collectors.toList());
+    }
+
+    private static List<JSONObject> getUserDeposits() throws Exception {
+        List<JSONObject> depositList = new ArrayList<>();
+        try {
+            EnumSet.allOf(Deribit.CURRENCY.class).forEach(
+                    currency -> {
+                        String getBalanceUrl = Deribit.GET_DEPOSIT_URL.concat("?currency=").concat(currency.toString());
+                        try {
+                            JSONObject result = CopperUtil.callEndpoint("GET", getBalanceUrl);
+                            if (result != null) depositList.add(result);
+                        } catch (Exception e) {
+                            LOGGER.error("Error calling endpoint " + getBalanceUrl);
+                        }
+                    }
+            );
+        } catch (Exception e) {
+            throw new Exception("Error calling endpoint " + Deribit.GET_DEPOSIT_URL);
+        }
+
+        return depositList;
+    }
+
+    private static List<JSONObject> getUserWithdrawals() throws Exception {
+        List<JSONObject> withdrawalList = new ArrayList<>();
+        try {
+            EnumSet.allOf(Deribit.CURRENCY.class).forEach(
+                    currency -> {
+                        String getBalanceUrl = Deribit.GET_WITHDRAWAL_URL.concat("?currency=").concat(currency.toString());
+                        try {
+                            JSONObject result = CopperUtil.callEndpoint("GET", getBalanceUrl);
+                            if (result != null) withdrawalList.add(result);
+                        } catch (Exception e) {
+                            LOGGER.error("Error calling endpoint " + getBalanceUrl);
+                        }
+                    }
+            );
+        } catch (Exception e) {
+            throw new Exception("Error calling endpoint " + Deribit.GET_DEPOSIT_URL);
+        }
+
+        return withdrawalList;
     }
 
 }
