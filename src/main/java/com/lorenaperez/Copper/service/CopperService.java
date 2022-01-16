@@ -1,13 +1,14 @@
 package com.lorenaperez.Copper.service;
 
 import com.lorenaperez.Copper.constants.Deribit;
-import com.lorenaperez.Copper.dto.UserHistoryResponseDTO;
-import com.lorenaperez.Copper.model.UserDeposit;
-import com.lorenaperez.Copper.model.UserWithdrawal;
-import com.lorenaperez.Copper.util.CopperUtil;
 import com.lorenaperez.Copper.dto.UserBalanceResponseDTO;
+import com.lorenaperez.Copper.dto.UserHistoryResponseDTO;
 import com.lorenaperez.Copper.model.Token;
 import com.lorenaperez.Copper.model.UserBalance;
+import com.lorenaperez.Copper.model.UserDeposit;
+import com.lorenaperez.Copper.model.UserWithdrawal;
+import com.lorenaperez.Copper.repository.CopperRepository;
+import com.lorenaperez.Copper.util.CopperUtil;
 import lombok.SneakyThrows;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -16,10 +17,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
-import com.lorenaperez.Copper.repository.CopperRepository;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;

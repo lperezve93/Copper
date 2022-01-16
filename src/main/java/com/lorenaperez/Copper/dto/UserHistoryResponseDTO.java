@@ -4,7 +4,6 @@ import com.lorenaperez.Copper.model.UserDeposit;
 import com.lorenaperez.Copper.model.UserWithdrawal;
 import lombok.Builder;
 import lombok.Data;
-import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
