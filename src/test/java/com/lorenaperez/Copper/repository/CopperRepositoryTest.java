@@ -59,7 +59,7 @@ public class CopperRepositoryTest {
         List<UserBalance> userBalances = createUserBalances();
 
         // When
-        List<UserBalance> userBalanceStored = CopperRepository.saveUserBalance(userBalances);
+        List<UserBalance> userBalanceStored = copperRepository.saveUserBalance(userBalances);
 
         // Then
         assertThat(userBalanceStored, notNullValue());

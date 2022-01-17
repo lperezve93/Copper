@@ -15,6 +15,8 @@ public class CopperRepository {
 
     private static Token token;
 
+    private List<UserBalance> userBalances;
+
     public static Token saveToken(Token newToken) {
         LOGGER.info("+++ Repository - saving token +++");
         token = newToken;
@@ -25,8 +27,9 @@ public class CopperRepository {
         return token != null ? token : null;
     }
 
-    public static List<UserBalance> saveUserBalance(List<UserBalance> userBalances) {
+    public List<UserBalance> saveUserBalance(List<UserBalance> userBalances) {
         LOGGER.info("+++ Repository - saving user balance +++");
+        this.userBalances = userBalances;
         return userBalances;
     }
 
