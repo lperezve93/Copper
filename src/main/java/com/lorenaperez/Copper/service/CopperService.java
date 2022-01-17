@@ -14,6 +14,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,9 @@ import java.util.stream.Collectors;
 public class CopperService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CopperService.class);
+
+    @Autowired
+    CopperRepository copperRepository;
 
     @EventListener(ApplicationReadyEvent.class)
     public void authentication() throws Exception {
@@ -54,18 +58,18 @@ public class CopperService {
         );
     }
 
-    public static List<UserBalanceResponseDTO> getAndSaveUserBalances() throws Exception {
+    public List<UserBalanceResponseDTO> getAndSaveUserBalances() throws Exception {
         List<UserBalance> userBalanceList = new ArrayList<>();
         List<JSONObject> userDepositList = getUserDeposits();
         for (JSONObject deposit : userDepositList) {
             UserBalance userBalance = calculateUserBalance(deposit);
             if (userBalance != null) userBalanceList.add(userBalance);
         }
-        if (userBalanceList.size() > 0) CopperRepository.saveUserBalance(userBalanceList);
+        if (userBalanceList.size() > 0) copperRepository.saveUserBalance(userBalanceList);
         return userBalanceList.stream().map(UserBalanceResponseDTO::from).collect(Collectors.toList());
     }
 
-    private static UserBalance calculateUserBalance(JSONObject deposit) {
+    private UserBalance calculateUserBalance(JSONObject deposit) {
         int depositCount = deposit.getInt("count");
         if (depositCount > 0) {
             Double totalAmount = (double) 0;
@@ -92,7 +96,7 @@ public class CopperService {
         return token;
     }
 
-    public static List<UserHistoryResponseDTO> getUserHistory() throws Exception {
+    public List<UserHistoryResponseDTO> getUserHistory() throws Exception {
         List<UserHistoryResponseDTO> userHistoryResponseDTOList;
 
         userHistoryResponseDTOList = getDepositHistory();
@@ -103,20 +107,20 @@ public class CopperService {
         return userHistoryResponseDTOList;
     }
 
-    private static List<UserHistoryResponseDTO> getDepositHistory() throws Exception {
+    private List<UserHistoryResponseDTO> getDepositHistory() throws Exception {
         List<JSONObject> userDepositList = getUserDeposits();
         List<UserDeposit> userDepositHistory = CopperUtil.fromJSONToDepositModel(userDepositList);
         return userDepositHistory.stream().map(UserHistoryResponseDTO::fromDeposit).collect(Collectors.toList());
 
     }
 
-    private static List<UserHistoryResponseDTO> getWithdrawalHistory() throws Exception {
+    private List<UserHistoryResponseDTO> getWithdrawalHistory() throws Exception {
         List<JSONObject> userWithdrawalList = getUserWithdrawals();
         List<UserWithdrawal> userWithdrawalHistory = CopperUtil.fromJSONToWithdrawalModel(userWithdrawalList);
         return userWithdrawalHistory.stream().map(UserHistoryResponseDTO::fromWithdrawal).collect(Collectors.toList());
     }
 
-    private static List<JSONObject> getUserDeposits() throws Exception {
+    protected List<JSONObject> getUserDeposits() throws Exception {
         List<JSONObject> depositList = new ArrayList<>();
         try {
             EnumSet.allOf(Deribit.CURRENCY.class).forEach(
@@ -137,7 +141,7 @@ public class CopperService {
         return depositList;
     }
 
-    private static List<JSONObject> getUserWithdrawals() throws Exception {
+    private List<JSONObject> getUserWithdrawals() throws Exception {
         List<JSONObject> withdrawalList = new ArrayList<>();
         try {
             EnumSet.allOf(Deribit.CURRENCY.class).forEach(
