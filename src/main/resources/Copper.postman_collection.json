@@ -1,0 +1,180 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Copper",
+		"_postman_id": "19b3941b-77cb-ec41-3181-2feca23c24fb",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET USER'S BALANCE",
+			"request": {
+				"url": "http://localhost:8080/copper/user-balance",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "GET USER'S DEPOSITS AND WITHDRAWALS",
+			"request": {
+				"url": "http://localhost:8080/copper/history",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "WITHDRAW TO ADDRESS",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8080/copper/withdraw?address=bcrt1q49mlrsaam7w0eljjjh38l6hcvcse4yr6xyyew0&currency=BTC&amount=0.00054&priority=mid",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"copper",
+						"withdraw"
+					],
+					"query": [
+						{
+							"key": "address",
+							"value": "bcrt1q49mlrsaam7w0eljjjh38l6hcvcse4yr6xyyew0",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "currency",
+							"value": "BTC",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "amount",
+							"value": "0.00054",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "priority",
+							"value": "mid",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "WITHDRAW TO ADDRESS - PRIORITY EXCEPTION",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8080/copper/withdraw?address=bcrt1q49mlrsaam7w0eljjjh38l6hcvcse4yr6xyyew0&currency=BTC&amount=0.00054&priority=mide",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"copper",
+						"withdraw"
+					],
+					"query": [
+						{
+							"key": "address",
+							"value": "bcrt1q49mlrsaam7w0eljjjh38l6hcvcse4yr6xyyew0",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "currency",
+							"value": "BTC",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "amount",
+							"value": "0.00054",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "priority",
+							"value": "mide",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "WITHDRAW TO ADDRESS - CURRENCY EXCEPTION",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8080/copper/withdraw?address=bcrt1q49mlrsaam7w0eljjjh38l6hcvcse4yr6xyyew0&currency=BT&amount=0.00054&priority=mid",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"copper",
+						"withdraw"
+					],
+					"query": [
+						{
+							"key": "address",
+							"value": "bcrt1q49mlrsaam7w0eljjjh38l6hcvcse4yr6xyyew0",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "currency",
+							"value": "BT",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "amount",
+							"value": "0.00054",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "priority",
+							"value": "mid",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
