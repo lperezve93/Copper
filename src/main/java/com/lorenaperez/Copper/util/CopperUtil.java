@@ -13,7 +13,9 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class CopperUtil {
@@ -25,6 +27,7 @@ public class CopperUtil {
         URL url = new URL(urlEndpoint);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod(type);
+        conn.setRequestProperty("Content-Type", "application/json");
         if (CopperRepository.getToken() != null)
             conn.setRequestProperty("Authorization", "Bearer ".concat(CopperRepository.getToken().getAccessToken()));
         StringBuilder result = new StringBuilder();
@@ -73,5 +76,12 @@ public class CopperUtil {
             }
         }
         return userWithdrawalList;
+    }
+
+    public static String timestampToDate(Integer timestamp) {
+        Date date = new Date(timestamp);
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        return format.format(date);
+
     }
 }

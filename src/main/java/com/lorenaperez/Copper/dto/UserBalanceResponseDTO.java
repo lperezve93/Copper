@@ -1,6 +1,6 @@
 package com.lorenaperez.Copper.dto;
 
-import com.lorenaperez.Copper.constants.Deribit;
+import com.lorenaperez.Copper.constants.Currency;
 import com.lorenaperez.Copper.model.UserBalance;
 import lombok.Builder;
 import lombok.Data;
@@ -9,7 +9,7 @@ import lombok.Data;
 @Builder
 public class UserBalanceResponseDTO {
 
-    private Deribit.CURRENCY currency;
+    private Currency currency;
 
     private Double amount;
 
