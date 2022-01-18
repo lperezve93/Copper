@@ -1,6 +1,6 @@
 package com.lorenaperez.Copper.service;
 
-import com.lorenaperez.Copper.constants.Deribit;
+import com.lorenaperez.Copper.constants.Currency;
 import com.lorenaperez.Copper.dto.UserBalanceResponseDTO;
 import com.lorenaperez.Copper.model.Token;
 import com.lorenaperez.Copper.model.UserBalance;
@@ -62,7 +62,7 @@ public class CopperServiceTest {
 
     private List<UserBalance> createUserBalances() {
         List<UserBalance> userBalances = new ArrayList<>();
-        userBalances.add(new UserBalance(Deribit.CURRENCY.BTC, 500D));
+        userBalances.add(new UserBalance(Currency.BTC, 500D));
         return userBalances;
     }
 

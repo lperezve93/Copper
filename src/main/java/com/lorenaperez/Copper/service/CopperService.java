@@ -1,8 +1,10 @@
 package com.lorenaperez.Copper.service;
 
+import com.lorenaperez.Copper.constants.Currency;
 import com.lorenaperez.Copper.constants.Deribit;
 import com.lorenaperez.Copper.dto.UserBalanceResponseDTO;
 import com.lorenaperez.Copper.dto.UserHistoryResponseDTO;
+import com.lorenaperez.Copper.dto.WithdrawResponseDTO;
 import com.lorenaperez.Copper.model.Token;
 import com.lorenaperez.Copper.model.UserBalance;
 import com.lorenaperez.Copper.model.UserDeposit;
@@ -38,9 +40,9 @@ public class CopperService {
     @EventListener(ApplicationReadyEvent.class)
     public void authentication() throws Exception {
         String url = Deribit.AUTH_URL;
-        url = url.concat("?client_id=ewIeJJC7");
-        url = url.concat("&client_secret=WLzZBYjTMnBqNMkuuxvPiaPFYlj3SW86NtebFRW1mLw");
-        url = url.concat("&grant_type=client_credentials");
+        url = url.concat("?client_id=").concat(Deribit.CLIENT_ID_VALUE);
+        url = url.concat("&client_secret=").concat(Deribit.CLIENT_SECRECT_VALUE);
+        url = url.concat("&grant_type=").concat(Deribit.CLIENT_CREDENTIALS);
         JSONObject authObject = CopperUtil.callEndpoint("GET", url);
         CopperRepository.saveToken(setTokenValue(authObject));
         refreshAuth();
@@ -80,7 +82,7 @@ public class CopperService {
                 totalAmount += element.getDouble("amount");
                 currency = (String) element.get("currency");
             }
-            return new UserBalance(Deribit.CURRENCY.valueOf(currency), totalAmount);
+            return new UserBalance(Currency.valueOf(currency), totalAmount);
         }
         LOGGER.debug("No deposit found on " + deposit);
         return null;
@@ -123,7 +125,7 @@ public class CopperService {
     protected List<JSONObject> getUserDeposits() throws Exception {
         List<JSONObject> depositList = new ArrayList<>();
         try {
-            EnumSet.allOf(Deribit.CURRENCY.class).forEach(
+            EnumSet.allOf(Currency.class).forEach(
                     currency -> {
                         String getBalanceUrl = Deribit.GET_DEPOSIT_URL.concat("?currency=").concat(currency.toString());
                         try {
@@ -144,7 +146,7 @@ public class CopperService {
     private List<JSONObject> getUserWithdrawals() throws Exception {
         List<JSONObject> withdrawalList = new ArrayList<>();
         try {
-            EnumSet.allOf(Deribit.CURRENCY.class).forEach(
+            EnumSet.allOf(Currency.class).forEach(
                     currency -> {
                         String getBalanceUrl = Deribit.GET_WITHDRAWAL_URL.concat("?currency=").concat(currency.toString());
                         try {
@@ -160,6 +162,16 @@ public class CopperService {
         }
 
         return withdrawalList;
+    }
+
+    public WithdrawResponseDTO withdraw(String address, String currency, String amount, String priority) throws Exception {
+        String url = Deribit.WITHDRAW_URL;
+        url += "?address=" + address;
+        url += "&amount=" + amount;
+        url += "&currency=" + currency;
+        url += "&priority=" + priority;
+        JSONObject response = CopperUtil.callEndpoint("GET", url);
+        return WithdrawResponseDTO.from(response);
     }
 
 }

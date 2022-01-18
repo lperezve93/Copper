@@ -11,6 +11,8 @@ public interface Deribit {
 
     String GET_WITHDRAWAL_URL = "/private/get_withdrawals";
 
+    String WITHDRAW_URL = "/private/withdraw";
+
     // ##### URL Params #####
     String CLIENT_ID = "client_id";
 
@@ -21,7 +23,5 @@ public interface Deribit {
     String CLIENT_ID_VALUE = "ewIeJJC7";
 
     String CLIENT_SECRECT_VALUE = "WLzZBYjTMnBqNMkuuxvPiaPFYlj3SW86NtebFRW1mLw";
-
-    enum CURRENCY {BTC, ETH, SOL, USDC}
 
 }

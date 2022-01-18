@@ -1,6 +1,6 @@
 package com.lorenaperez.Copper.repository;
 
-import com.lorenaperez.Copper.constants.Deribit;
+import com.lorenaperez.Copper.constants.Currency;
 import com.lorenaperez.Copper.model.Token;
 import com.lorenaperez.Copper.model.UserBalance;
 import org.junit.jupiter.api.Test;
@@ -87,10 +87,10 @@ public class CopperRepositoryTest {
         return token;
     }
 
-    private List<UserBalance> createUserBalances () {
+    private List<UserBalance> createUserBalances() {
         List<UserBalance> userBalanceList = new ArrayList<>();
-        UserBalance userBalance1 = new UserBalance(Deribit.CURRENCY.BTC, 340.0);
-        UserBalance userBalance2 = new UserBalance(Deribit.CURRENCY.ETH, 125.0);
+        UserBalance userBalance1 = new UserBalance(Currency.BTC, 340.0);
+        UserBalance userBalance2 = new UserBalance(Currency.ETH, 125.0);
         userBalanceList.add(userBalance1);
         userBalanceList.add(userBalance2);
         return userBalanceList;

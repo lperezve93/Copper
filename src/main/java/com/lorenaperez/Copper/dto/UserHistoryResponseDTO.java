@@ -2,11 +2,9 @@ package com.lorenaperez.Copper.dto;
 
 import com.lorenaperez.Copper.model.UserDeposit;
 import com.lorenaperez.Copper.model.UserWithdrawal;
+import com.lorenaperez.Copper.util.CopperUtil;
 import lombok.Builder;
 import lombok.Data;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 @Data
 @Builder
@@ -35,7 +33,7 @@ public class UserHistoryResponseDTO {
                 .address(userDeposit.getAddress())
                 .amount(userDeposit.getAmount())
                 .currency(userDeposit.getCurrency())
-                .date(timestampToDate(userDeposit.getTimestamp()))
+                .date(CopperUtil.timestampToDate(userDeposit.getTimestamp()))
                 .state(userDeposit.getState())
                 .transactionId(userDeposit.getTransactionId())
                 .type("DEPOSIT")
@@ -51,17 +49,10 @@ public class UserHistoryResponseDTO {
                 .currency(userWithdrawal.getCurrency())
                 .fee(userWithdrawal.getFee())
                 .priority(userWithdrawal.getPriority())
-                .date(timestampToDate(userWithdrawal.getTimestamp()))
+                .date(CopperUtil.timestampToDate(userWithdrawal.getTimestamp()))
                 .state(userWithdrawal.getState())
                 .transactionId(userWithdrawal.getTransactionId())
                 .type("WITHDRAWAL")
                 .build();
-    }
-
-    private static String timestampToDate(Integer timestamp) {
-        Date date = new Date(timestamp);
-        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-        return format.format(date);
-
     }
 }
